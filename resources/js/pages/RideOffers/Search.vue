@@ -7,7 +7,7 @@ import InputError from '@/components/InputError.vue';
 import InputLabel from '@/components/InputLabel.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
-import { Search as SearchIcon, AlertTriangle } from 'lucide-vue-next';
+import { Search as SearchIcon, AlertTriangle, InfoIcon } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -151,6 +151,7 @@ const mapLoading = ref(true);
 const selectRideOfferHandler = ref(null);
 const isSearching = ref(false);
 const searchError = ref(null);
+const hasSearched = ref(false);
 
 const submit = async () => {
   // Parse search query into zip code and city
@@ -188,6 +189,8 @@ const submit = async () => {
 
   // Set searching state
   isSearching.value = true;
+
+  hasSearched.value = true;
 
   try {
     // Make AJAX request to search API
@@ -553,54 +556,65 @@ const addMarkersToMap = (offers) => {
               <form @submit.prevent="submit">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <!-- Combined Search Field -->
-                  <div class="md:col-span-1">
-                    <InputLabel for="search_query" value="Ort oder PLZ" required />
-                    <div class="mt-1 flex">
-                      <TextInput
-                        id="search_query"
-                        type="text"
-                        class="block w-full rounded-r-none"
-                        v-model="form.search_query"
-                        required
-                        autofocus
-                        placeholder="z.B. 08228 Rodewisch"
-                      />
-                      <div class="relative group">
-                        <button
-                          type="button"
-                          class="px-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
-                          @click="getCurrentLocation"
-                          :disabled="isGettingLocation"
-                          title="Aktuellen Standort verwenden"
-                        >
-                          <template v-if="isGettingLocation">
-                            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                          </template>
-                          <template v-else>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                            </svg>
-                          </template>
-                        </button>
-                        <!-- Tooltip -->
-                        <div class="absolute right-0 top-full mt-2 w-48 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                          Aktuellen Standort verwenden
+                    <div class="md:col-span-1">
+                        <InputLabel for="search_query" value="PLZ und Ort" required />
+                        <div class="mt-1 flex">
+                            <TextInput
+                                id="search_query"
+                                type="text"
+                                class="block w-full rounded-r-none h-full"
+                                v-model="form.search_query"
+                                required
+                                autofocus
+                                placeholder="z.B. 08228 Rodewisch"
+                            />
+                            <div class="relative group">
+                                <button
+                                    type="button"
+                                    class="px-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors h-full"
+                                    @click="getCurrentLocation"
+                                    :disabled="isGettingLocation"
+                                    title="Aktuellen Standort verwenden"
+                                >
+                                    <template v-if="isGettingLocation">
+                                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path
+                                                class="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                            ></path>
+                                        </svg>
+                                    </template>
+                                    <template v-else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
+                                    </template>
+                                </button>
+                                <!-- Tooltip -->
+                                <div
+                                    class="absolute right-0 top-full mt-2 w-48 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10"
+                                >
+                                    Aktuellen Standort verwenden
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            Geben Sie eine Postleitzahl und einen Ort ein
+                        </p>
+                        <div v-if="locationError" class="mt-1 text-xs text-red-500">
+                            {{ locationError }}
+                        </div>
+                        <InputError class="mt-2" :message="form.errors.search_query || form.errors.zip_code || form.errors.city" />
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      Geben Sie einen Ort oder eine Postleitzahl ein
-                    </p>
-                    <div v-if="locationError" class="mt-1 text-xs text-red-500">
-                      {{ locationError }}
-                    </div>
-                    <InputError class="mt-2" :message="form.errors.search_query || form.errors.zip_code || form.errors.city" />
-                  </div>
 
-                  <!-- Radius Slider -->
+
+                    <!-- Radius Slider -->
                   <div class="md:col-span-1">
                     <InputLabel for="radius" value="Umkreis" />
                     <div class="mt-3 px-2 relative">
@@ -645,31 +659,38 @@ const addMarkersToMap = (offers) => {
                   <div v-if="searchError" class="text-red-500 mb-4 sm:mb-0">
                     {{ searchError }}
                   </div>
-                  <div class="flex items-center">
-                    <div class="text-sm text-gray-500 mr-4 hidden sm:block">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                      </svg>
-                      Drücken Sie Enter oder klicken Sie auf Suchen
+                    <div class="w-full flex items-center justify-between">
+                        <!-- Textbereich links -->
+                        <div class="text-sm text-gray-500 hidden sm:block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                      clip-rule="evenodd" />
+                            </svg>
+                            Drücken Sie Enter oder klicken Sie auf Suchen
+                        </div>
+
+                        <!-- Buttonbereich rechts -->
+                        <PrimaryButton
+                            type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+                            :disabled="isSearching"
+                        >
+                            <template v-if="isSearching">
+                                <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Suche läuft...
+                            </template>
+                            <template v-else>
+                                <SearchIcon class="h-5 w-5 mr-2" />
+                                Suchen
+                            </template>
+                        </PrimaryButton>
                     </div>
-                    <PrimaryButton
-                      type="submit"
-                      class="bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
-                      :disabled="isSearching"
-                    >
-                      <template v-if="isSearching">
-                        <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Suche läuft...
-                      </template>
-                      <template v-else>
-                        <SearchIcon class="h-5 w-5 mr-2" />
-                        Suchen
-                      </template>
-                    </PrimaryButton>
-                  </div>
+
                 </div>
               </form>
             </div>
@@ -691,15 +712,12 @@ const addMarkersToMap = (offers) => {
                   </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    :href="route('ride-offers.create')"
-                    class="inline-flex items-center justify-center px-5 py-2.5 gradient-primary button-glow text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Anbieten
-                  </Link>
+                    <a :href="route('ride-offers.create')" class="inline-flex items-center justify-center px-5 py-2.5 gradient-primary button-glow text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        Anbieten
+                    </a>
                 </div>
               </div>
 
@@ -830,7 +848,7 @@ const addMarkersToMap = (offers) => {
                 </div>
 
                 <!-- No search results message - Only shown when search was performed but no results found -->
-                <div v-else-if="Object.keys(searchParams).length > 0" class="gradient-card modern-shadow p-8 rounded-xl text-center">
+                <div v-else-if="Object.keys(searchParams).length > 0 && hasSearched" class="gradient-card modern-shadow p-8 rounded-xl text-center">
                   <div class="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-4">
                     <AlertTriangle class="h-8 w-8 text-warning" />
                   </div>
@@ -843,6 +861,14 @@ const addMarkersToMap = (offers) => {
                     Mitfahrgelegenheit anbieten
                   </a>
                 </div>
+
+                  <div v-else-if="!hasSearched" class="gradient-card modern-shadow p-8 rounded-xl text-center">
+                      <div class="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-4">
+                          <SearchIcon class="h-8 w-8 text-warning" />
+                      </div>
+                      <h3 class="text-xl font-semibold mb-3 text-foreground">Starte die Suche</h3>
+                      <p class="text-muted-foreground mb-6 max-w-md mx-auto">Suche etwas, um Ergebnisse zu sehen.</p>
+                  </div>
               </div>
             </div>
 
