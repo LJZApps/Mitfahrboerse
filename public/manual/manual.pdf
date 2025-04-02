@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitfahrbörse - Benutzerhandbuch (PDF Version)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #3b82f6;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            background-color: #f9fafb;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note {
+            background-color: #e6f7ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .steps {
+            margin: 30px 0;
+        }
+        
+        .step {
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #3b82f6;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .button:hover {
+            background-color: #2563eb;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mitfahrbörse - Benutzerhandbuch</h1>
+        
+        <div class="note">
+            <p><strong>Hinweis:</strong> Dies ist ein Platzhalter für die PDF-Version des Benutzerhandbuchs. In einer realen Implementierung würde hier eine PDF-Datei zum Download angeboten werden.</p>
+        </div>
+        
+        <p>Die PDF-Version des Benutzerhandbuchs enthält alle Informationen, die auch in der Web-Version verfügbar sind, in einem druckfreundlichen Format. Sie können die PDF-Version herunterladen, um das Handbuch offline zu lesen oder auszudrucken.</p>
+        
+        <div class="steps">
+            <h2>So erstellen Sie die PDF-Version des Handbuchs:</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <span>Installieren Sie ein Tool zur PDF-Generierung wie wkhtmltopdf oder einen ähnlichen HTML-zu-PDF-Konverter.</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <span>Erstellen Sie eine spezielle HTML-Version des Handbuchs, die für den Druck optimiert ist (wie in manual.html).</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <span>Konvertieren Sie die HTML-Version in eine PDF-Datei mit dem installierten Tool.</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <span>Speichern Sie die PDF-Datei als manual.pdf im Verzeichnis public/manual/.</span>
+            </div>
+        </div>
+        
+        <p>Beispielbefehl für die Konvertierung mit wkhtmltopdf:</p>
+        <pre>wkhtmltopdf manual.html manual.pdf</pre>
+        
+        <a href="index.html" class="button">Zurück zur Web-Version des Handbuchs</a>
+        
+        <div class="footer">
+            <p>&copy; 2023 Mitfahrbörse. Alle Rechte vorbehalten.</p>
+        </div>
+    </div>
+</body>
+</html>

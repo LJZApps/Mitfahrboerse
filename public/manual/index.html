@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitfahrbörse - Benutzerhandbuch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-car-side"></i>
+                <h1>Mitfahrbörse</h1>
+            </div>
+            <p class="subtitle">Benutzerhandbuch</p>
+            <div class="download-pdf">
+                <a href="manual.pdf" target="_blank" class="pdf-button">
+                    <i class="fas fa-file-pdf"></i> PDF-Version herunterladen
+                </a>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#einleitung" class="active"><i class="fas fa-info-circle"></i> Einleitung</a></li>
+                <li><a href="anbieten.html"><i class="fas fa-plus-circle"></i> Mitfahrgelegenheit anbieten</a></li>
+                <li><a href="suchen.html"><i class="fas fa-search"></i> Mitfahrgelegenheit suchen</a></li>
+                <li><a href="verwalten.html"><i class="fas fa-edit"></i> Angebote verwalten</a></li>
+                <li><a href="support.html"><i class="fas fa-question-circle"></i> Support</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="einleitung" class="content-section">
+                <h2>Einleitung</h2>
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <p>Willkommen zum Benutzerhandbuch der Mitfahrbörse! Diese Plattform ermöglicht es Ihnen, Mitfahrgelegenheiten anzubieten und zu finden.</p>
+                        
+                        <p>Die Mitfahrbörse ist eine einfache und effektive Lösung, um:</p>
+                        <ul>
+                            <li>Fahrgemeinschaften zu bilden</li>
+                            <li>Kosten zu sparen</li>
+                            <li>Die Umwelt zu schonen</li>
+                            <li>Neue Kontakte zu knüpfen</li>
+                        </ul>
+                        
+                        <p>Dieses Handbuch führt Sie durch alle Funktionen der Plattform und hilft Ihnen, die Mitfahrbörse optimal zu nutzen.</p>
+                    </div>
+                    <div class="intro-image">
+                        <img src="images/dashboard.png" alt="Mitfahrbörse Dashboard" onerror="this.src='https://via.placeholder.com/400x300?text=Mitfahrbörse+Dashboard'">
+                    </div>
+                </div>
+
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h3>Mitfahrgelegenheit anbieten</h3>
+                        <p>Erstellen Sie ein Angebot für Ihre Fahrten und teilen Sie Ihren Weg mit anderen.</p>
+                        <a href="anbieten.html" class="btn">Mehr erfahren</a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Mitfahrgelegenheit suchen</h3>
+                        <p>Finden Sie passende Mitfahrgelegenheiten in Ihrer Nähe mit der Suchfunktion.</p>
+                        <a href="suchen.html" class="btn">Mehr erfahren</a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>Angebote verwalten</h3>
+                        <p>Bearbeiten oder löschen Sie Ihre erstellten Mitfahrgelegenheiten.</p>
+                        <a href="verwalten.html" class="btn">Mehr erfahren</a>
+                    </div>
+                </div>
+
+                <div class="quick-start">
+                    <h3>Schnellstart</h3>
+                    <ol>
+                        <li>
+                            <strong>Mitfahrgelegenheit anbieten:</strong> 
+                            Klicken Sie auf "Anbieten" und füllen Sie das Formular mit Ihren Kontaktdaten und Fahrtdetails aus.
+                        </li>
+                        <li>
+                            <strong>Mitfahrgelegenheit suchen:</strong> 
+                            Geben Sie Ihre PLZ oder Ihren Ort ein und wählen Sie einen Suchradius, um Angebote in Ihrer Nähe zu finden.
+                        </li>
+                        <li>
+                            <strong>Angebote verwalten:</strong> 
+                            Verwenden Sie den Bearbeitungscode, den Sie bei der Erstellung erhalten haben, um Ihre Angebote zu bearbeiten oder zu löschen.
+                        </li>
+                    </ol>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2023 Mitfahrbörse. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="index.html">Startseite</a>
+                    <a href="support.html">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple script to highlight the active navigation item
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.main-nav a');
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href').split('#')[0] || 'index.html';
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                } else if (currentPage === 'index.html' && link.getAttribute('href') === '#einleitung') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angebote verwalten - Mitfahrbörse Benutzerhandbuch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-car-side"></i>
+                <h1>Mitfahrbörse</h1>
+            </div>
+            <p class="subtitle">Benutzerhandbuch</p>
+            <div class="download-pdf">
+                <a href="manual.pdf" target="_blank" class="pdf-button">
+                    <i class="fas fa-file-pdf"></i> PDF-Version herunterladen
+                </a>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-info-circle"></i> Einleitung</a></li>
+                <li><a href="anbieten.html"><i class="fas fa-plus-circle"></i> Mitfahrgelegenheit anbieten</a></li>
+                <li><a href="suchen.html"><i class="fas fa-search"></i> Mitfahrgelegenheit suchen</a></li>
+                <li><a href="verwalten.html" class="active"><i class="fas fa-edit"></i> Angebote verwalten</a></li>
+                <li><a href="support.html"><i class="fas fa-question-circle"></i> Support</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="content-section">
+                <h2>Angebote verwalten</h2>
+                
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <p>Auf dieser Seite erfahren Sie, wie Sie Ihre erstellten Mitfahrgelegenheiten verwalten können. Sie können Ihre Angebote bearbeiten oder löschen, wenn sie nicht mehr aktuell sind.</p>
+                        
+                        <p><strong>Wichtig:</strong> Um Ihre Angebote zu verwalten, benötigen Sie den Bearbeitungscode, den Sie bei der Erstellung erhalten haben.</p>
+                    </div>
+                    <div class="intro-image">
+                        <img src="images/manage-offers.png" alt="Angebote verwalten" onerror="this.src='https://via.placeholder.com/400x300?text=Angebote+verwalten'">
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        <h3>Bearbeitungscode verwenden</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Um ein Angebot zu bearbeiten oder zu löschen, benötigen Sie den Bearbeitungscode, den Sie bei der Erstellung erhalten haben.</p>
+                        
+                        <div class="warning">
+                            <p>Wenn Sie den Bearbeitungscode verloren haben, können Sie Ihr Angebot nicht mehr bearbeiten oder löschen. In diesem Fall wenden Sie sich bitte an den Support.</p>
+                        </div>
+                        
+                        <div class="step-image">
+                            <img src="images/edit-code-example.png" alt="Beispiel Bearbeitungscode" onerror="this.src='https://via.placeholder.com/600x100?text=Beispiel+Bearbeitungscode'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        <h3>Angebot bearbeiten</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>So bearbeiten Sie ein bestehendes Angebot:</p>
+                        
+                        <ol>
+                            <li>Öffnen Sie die Bestätigungsseite mit Ihrem Bearbeitungscode (URL: <code>/ride-offers/confirmation/IHR-CODE</code>)</li>
+                            <li>Klicken Sie auf den Button <strong>"Angebot bearbeiten"</strong></li>
+                            <li>Nehmen Sie die gewünschten Änderungen vor</li>
+                            <li>Klicken Sie auf <strong>"Angebot aktualisieren"</strong>, um die Änderungen zu speichern</li>
+                        </ol>
+                        
+                        <div class="note">
+                            <p>Sie können alle Informationen Ihres Angebots bearbeiten, außer dem Bearbeitungscode selbst.</p>
+                        </div>
+                        
+                        <div class="step-image">
+                            <img src="images/edit-offer.png" alt="Angebot bearbeiten" onerror="this.src='https://via.placeholder.com/600x300?text=Angebot+bearbeiten'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        <h3>Angebot löschen</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>So löschen Sie ein bestehendes Angebot:</p>
+                        
+                        <ol>
+                            <li>Öffnen Sie die Bestätigungsseite mit Ihrem Bearbeitungscode (URL: <code>/ride-offers/confirmation/IHR-CODE</code>)</li>
+                            <li>Klicken Sie auf den Button <strong>"Angebot löschen"</strong></li>
+                            <li>Bestätigen Sie die Löschung im Bestätigungsdialog</li>
+                        </ol>
+                        
+                        <div class="warning">
+                            <p><strong>Achtung:</strong> Das Löschen eines Angebots ist endgültig und kann nicht rückgängig gemacht werden.</p>
+                        </div>
+                        
+                        <div class="step-image">
+                            <img src="images/delete-offer.png" alt="Angebot löschen" onerror="this.src='https://via.placeholder.com/600x200?text=Angebot+löschen'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        <h3>Gültigkeitszeitraum verlängern</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Wenn Ihr Angebot bald abläuft, können Sie den Gültigkeitszeitraum verlängern:</p>
+                        
+                        <ol>
+                            <li>Bearbeiten Sie Ihr Angebot wie in Schritt 2 beschrieben</li>
+                            <li>Ändern Sie das Datum im Feld <strong>"Gültig bis"</strong> auf ein späteres Datum</li>
+                            <li>Klicken Sie auf <strong>"Angebot aktualisieren"</strong>, um die Änderung zu speichern</li>
+                        </ol>
+                        
+                        <div class="tip">
+                            <p>Es empfiehlt sich, regelmäßig zu prüfen, ob Ihre Angebote noch aktuell sind und bei Bedarf den Gültigkeitszeitraum zu verlängern.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        <h3>Kontaktanfragen verwalten</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Wenn Interessenten Kontakt zu Ihnen aufnehmen, erhalten Sie eine E-Mail an die von Ihnen angegebene E-Mail-Adresse. So gehen Sie mit Kontaktanfragen um:</p>
+                        
+                        <ul>
+                            <li>Antworten Sie zeitnah auf Anfragen</li>
+                            <li>Klären Sie Details wie Treffpunkt, Uhrzeit und eventuelle Kosten</li>
+                            <li>Informieren Sie Interessenten, wenn sich Änderungen ergeben</li>
+                            <li>Aktualisieren Sie Ihr Angebot, wenn es nicht mehr verfügbar ist</li>
+                        </ul>
+                        
+                        <div class="note">
+                            <p>Die Mitfahrbörse dient nur der Vermittlung von Kontakten. Die konkrete Absprache erfolgt direkt zwischen Ihnen und den Interessenten.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-start">
+                    <h3>Tipps für die Verwaltung Ihrer Angebote</h3>
+                    <ul>
+                        <li><strong>Bearbeitungscode sicher aufbewahren:</strong> Notieren Sie sich den Bearbeitungscode an einem sicheren Ort oder speichern Sie die Bestätigungs-E-Mail.</li>
+                        <li><strong>Angebote aktuell halten:</strong> Aktualisieren Sie Ihre Angebote regelmäßig, um sicherzustellen, dass die Informationen korrekt sind.</li>
+                        <li><strong>Nicht mehr benötigte Angebote löschen:</strong> Wenn Sie keine Mitfahrgelegenheit mehr anbieten können, löschen Sie Ihr Angebot, um keine falschen Erwartungen zu wecken.</li>
+                        <li><strong>Lesezeichen setzen:</strong> Setzen Sie ein Lesezeichen für die Bestätigungsseite Ihres Angebots, um schnell darauf zugreifen zu können.</li>
+                    </ul>
+                </div>
+
+                <div class="navigation-buttons">
+                    <a href="anbieten.html" class="btn"><i class="fas fa-arrow-left"></i> Zurück zu Mitfahrgelegenheit anbieten</a>
+                    <a href="support.html" class="btn">Weiter zum Support <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2023 Mitfahrbörse. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="index.html">Startseite</a>
+                    <a href="support.html">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

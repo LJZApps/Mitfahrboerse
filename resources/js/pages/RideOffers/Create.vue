@@ -462,7 +462,7 @@ const submit = () => {
               <!-- Form actions with modern styling -->
               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end mt-10 pt-6 border-t border-gray-100/20 dark:border-gray-700/20">
                 <Link
-                  :href="route('ride-offers.index')"
+                  :href="route('home')"
                   class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-muted hover:bg-muted/80 text-muted-foreground font-medium rounded-lg shadow-sm transition-all duration-200 hover-scale mb-3 sm:mb-0"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
