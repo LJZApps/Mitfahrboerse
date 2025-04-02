@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="1000" viewBox="0 0 800 1000">
+  <style>
+    .activity {
+      fill: #e8f5e9;
+      stroke: #2e7d32;
+      stroke-width: 2;
+    }
+    .decision {
+      fill: #fff8e1;
+      stroke: #ffa000;
+      stroke-width: 2;
+    }
+    .start-end {
+      fill: #ffebee;
+      stroke: #c62828;
+      stroke-width: 2;
+    }
+    .arrow {
+      stroke: #424242;
+      stroke-width: 1.5;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+    .label {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      text-anchor: middle;
+    }
+    .decision-label {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-anchor: middle;
+    }
+    .title {
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .swimlane {
+      fill: none;
+      stroke: #9e9e9e;
+      stroke-width: 1;
+      stroke-dasharray: 5,5;
+    }
+    .swimlane-label {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#424242" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" class="title">Aktivitätsdiagramm - Mitfahrbörse BSZ Vogtland</text>
+
+  <!-- Swimlanes -->
+  <rect x="50" y="60" width="350" height="900" class="swimlane" />
+  <text x="225" y="80" class="swimlane-label">Fahrer</text>
+
+  <rect x="400" y="60" width="350" height="900" class="swimlane" />
+  <text x="575" y="80" class="swimlane-label">Mitfahrer</text>
+
+  <!-- Fahrer Activities -->
+  <!-- Start -->
+  <circle cx="225" cy="120" r="20" class="start-end" />
+
+  <!-- Activities -->
+  <rect x="125" y="170" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="205" class="label">Formular für Mitfahrgelegenheit ausfüllen</text>
+
+  <rect x="125" y="270" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="305" class="label">Adressdaten eingeben</text>
+
+  <rect x="125" y="370" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="405" class="label">Kontaktdaten eingeben</text>
+
+  <rect x="125" y="470" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="505" class="label">Gültigkeitszeitraum festlegen</text>
+
+  <rect x="125" y="570" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="605" class="label">Mitfahrgelegenheit speichern</text>
+
+  <rect x="125" y="670" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="705" class="label">Bearbeitungscode erhalten</text>
+
+  <!-- Decision -->
+  <polygon points="225,770 275,820 225,870 175,820" class="decision" />
+  <text x="225" y="820" class="decision-label">Bearbeiten?</text>
+
+  <rect x="125" y="900" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="225" y="935" class="label">Mitfahrgelegenheit bearbeiten/löschen</text>
+
+  <!-- End -->
+  <circle cx="225" cy="1000" r="20" class="start-end" />
+
+  <!-- Mitfahrer Activities -->
+  <!-- Start -->
+  <circle cx="575" cy="120" r="20" class="start-end" />
+
+  <!-- Activities -->
+  <rect x="475" y="170" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="205" class="label">Suchformular ausfüllen</text>
+
+  <rect x="475" y="270" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="305" class="label">PLZ und Ort eingeben</text>
+
+  <!-- Decision -->
+  <polygon points="575,370 625,420 575,470 525,420" class="decision" />
+  <text x="575" y="420" class="decision-label">Umkreissuche?</text>
+
+  <rect x="475" y="500" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="535" class="label">Umkreis festlegen</text>
+
+  <rect x="475" y="600" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="635" class="label">Suche starten</text>
+
+  <rect x="475" y="700" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="735" class="label">Ergebnisse auf Karte anzeigen</text>
+
+  <rect x="475" y="800" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="835" class="label">Mitfahrgelegenheit auswählen</text>
+
+  <rect x="475" y="900" width="200" height="60" rx="10" ry="10" class="activity" />
+  <text x="575" y="935" class="label">Kontakt aufnehmen</text>
+
+  <!-- End -->
+  <circle cx="575" cy="1000" r="20" class="start-end" />
+
+  <!-- Arrows - Fahrer -->
+  <path d="M225,140 L225,170" class="arrow" />
+  <path d="M225,230 L225,270" class="arrow" />
+  <path d="M225,330 L225,370" class="arrow" />
+  <path d="M225,430 L225,470" class="arrow" />
+  <path d="M225,530 L225,570" class="arrow" />
+  <path d="M225,630 L225,670" class="arrow" />
+  <path d="M225,730 L225,770" class="arrow" />
+  <path d="M175,820 L125,820 L125,930 L125,930" class="arrow" />
+  <text x="150" y="800" class="decision-label">Ja</text>
+  <path d="M225,870 L225,1000" class="arrow" />
+  <text x="240" y="935" class="decision-label">Nein</text>
+  <path d="M225,960 L225,980" class="arrow" />
+
+  <!-- Arrows - Mitfahrer -->
+  <path d="M575,140 L575,170" class="arrow" />
+  <path d="M575,230 L575,270" class="arrow" />
+  <path d="M575,330 L575,370" class="arrow" />
+  <path d="M525,420 L475,420 L475,530 L475,530" class="arrow" />
+  <text x="500" y="400" class="decision-label">Ja</text>
+  <path d="M575,470 L575,600" class="arrow" />
+  <text x="590" y="535" class="decision-label">Nein</text>
+  <path d="M575,560 L575,600" class="arrow" />
+  <path d="M575,660 L575,700" class="arrow" />
+  <path d="M575,760 L575,800" class="arrow" />
+  <path d="M575,860 L575,900" class="arrow" />
+  <path d="M575,960 L575,980" class="arrow" />
+</svg>

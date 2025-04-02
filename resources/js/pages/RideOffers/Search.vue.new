@@ -1,0 +1,365 @@
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
+import InputError from '@/components/InputError.vue';
+import InputLabel from '@/components/InputLabel.vue';
+import PrimaryButton from '@/components/PrimaryButton.vue';
+import TextInput from '@/components/TextInput.vue';
+import { Search as SearchIcon, AlertTriangle } from 'lucide-vue-next';
+import axios from 'axios';
+
+const props = defineProps({
+  rideOffers: {
+    type: Array,
+    default: () => [],
+  },
+  searchParams: {
+    type: Object,
+    default: () => ({}),
+  },
+  searchCoordinates: {
+    type: Object,
+    default: null,
+  },
+});
+
+// Local state for AJAX search results
+const rideOffers = ref(props.rideOffers || []);
+const searchCoordinates = ref(props.searchCoordinates);
+const searchParams = ref(props.searchParams || {});
+
+const form = useForm({
+  zip_code: props.searchParams.zip_code || '',
+  city: props.searchParams.city || '',
+  radius: props.searchParams.radius || 5,
+});
+
+// Reference to the radius circle on the map
+const radiusCircle = ref(null);
+
+const map = ref(null);
+const markerLayer = ref(null);
+const markers = ref([]);
+const selectedOffer = ref(null);
+const mapError = ref(false);
+const mapLoading = ref(true);
+const selectRideOfferHandler = ref(null);
+const isSearching = ref(false);
+const searchError = ref(null);
+
+const submit = async () => {
+  console.log('🔍 Submit function called - Starting search process');
+  console.log('🔍 Search parameters:', { zip_code: form.zip_code, city: form.city, radius: form.radius });
+
+  // Ensure radius is a number and at least 1
+  form.radius = Math.max(1, parseInt(form.radius) || 5);
+  console.log('🔍 Normalized radius:', form.radius);
+
+  // Close any open popups before performing a new search
+  if (map.value) {
+    console.log('🔍 Closing any open popups on the map');
+    map.value.closePopup();
+
+    // Ensure all markers are properly attached to the map
+    if (markerLayer.value) {
+      console.log('🔍 Refreshing marker layer to ensure proper zoom behavior');
+      console.log('🔍 Current markers count before refresh:', markers.value.length);
+
+      // Refresh the marker layer to ensure proper zoom behavior
+      const currentMarkers = [...markers.value];
+      markerLayer.value.clearLayers();
+      markers.value = [];
+
+      // Re-add existing markers to ensure they're properly attached
+      currentMarkers.forEach(marker => {
+        if (marker.leafletMarker) {
+          markerLayer.value.addLayer(marker.leafletMarker);
+          markers.value.push(marker);
+        }
+      });
+
+      console.log('🔍 Markers count after refresh:', markers.value.length);
+    } else {
+      console.log('🔍 No marker layer found, skipping refresh');
+    }
+  }
+
+  // Reset selected offer
+  console.log('🔍 Resetting selected offer');
+  selectedOffer.value = null;
+
+  // Reset search error
+  console.log('🔍 Resetting search error');
+  searchError.value = null;
+
+  // Set searching state
+  console.log('🔍 Setting searching state to true');
+  isSearching.value = true;
+
+  try {
+    console.log('🔍 Making AJAX request to search API');
+    // Make AJAX request to search API
+    const response = await axios.post(route('api.ride-offers.search'), {
+      zip_code: form.zip_code,
+      city: form.city,
+      radius: form.radius
+    });
+
+    console.log('🔍 Search API response received:', {
+      rideOffersCount: response.data.rideOffers?.length || 0,
+      searchParams: response.data.searchParams,
+      hasCoordinates: !!response.data.searchCoordinates
+    });
+
+    // Update local state with search results
+    rideOffers.value = response.data.rideOffers;
+    searchParams.value = response.data.searchParams;
+    searchCoordinates.value = response.data.searchCoordinates;
+
+    console.log('🔍 Updated local state with search results');
+    console.log('🔍 Ride offers count:', rideOffers.value.length);
+    console.log('🔍 Search coordinates:', searchCoordinates.value);
+
+    // Update the radius circle on the map if we have coordinates
+    console.log('🔍 Updating radius circle on the map');
+    updateRadiusCircle();
+  } catch (error) {
+    console.error('🔍 Search error:', error);
+    console.error('🔍 Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    searchError.value = 'Ein Fehler ist bei der Suche aufgetreten. Bitte versuchen Sie es erneut.';
+  } finally {
+    console.log('🔍 Setting searching state to false');
+    isSearching.value = false;
+    console.log('🔍 Submit function completed');
+  }
+};
+
+// Function to update or create the radius circle on the map
+const updateRadiusCircle = () => {
+  console.log('🔵 updateRadiusCircle function called');
+
+  if (!map.value || !searchCoordinates.value) {
+    console.log('🔵 Cannot update radius circle: map or searchCoordinates is missing', {
+      hasMap: !!map.value,
+      hasCoordinates: !!searchCoordinates.value
+    });
+    return;
+  }
+
+  const L = window.L;
+  if (!L) {
+    console.log('🔵 Cannot update radius circle: Leaflet library not available');
+    return;
+  }
+
+  // Remove existing circle if it exists
+  if (radiusCircle.value) {
+    console.log('🔵 Removing existing radius circle');
+    radiusCircle.value.remove();
+  }
+
+  // Create a new circle with the current radius
+  const radius = parseInt(form.radius) || 5;
+  console.log('🔵 Creating new radius circle with radius:', radius, 'km');
+  console.log('🔵 Circle center coordinates:', {
+    latitude: searchCoordinates.value.latitude,
+    longitude: searchCoordinates.value.longitude
+  });
+
+  try {
+    radiusCircle.value = L.circle(
+      [searchCoordinates.value.latitude, searchCoordinates.value.longitude],
+      {
+        radius: radius * 1000, // Convert km to meters
+        fillColor: '#3b82f6',
+        fillOpacity: 0.1,
+        color: '#3b82f6',
+        weight: 2
+      }
+    ).addTo(map.value);
+    console.log('🔵 Radius circle created and added to map successfully');
+  } catch (error) {
+    console.error('🔵 Error creating radius circle:', error);
+  }
+};
+
+const selectOffer = (offer) => {
+  console.log('🎯 selectOffer function called with offer:', {
+    id: offer.id,
+    name: `${offer.first_name || ''} ${offer.last_name}`,
+    hasCoordinates: !!(offer.latitude && offer.longitude)
+  });
+
+  selectedOffer.value = offer;
+  console.log('🎯 Selected offer set in state');
+
+  // If we have a map and the offer has coordinates, center the map on the offer
+  if (map.value && offer.latitude && offer.longitude) {
+    console.log('🎯 Centering map on offer coordinates:', {
+      latitude: offer.latitude,
+      longitude: offer.longitude,
+      zoomLevel: 14
+    });
+
+    try {
+      map.value.setView([offer.latitude, offer.longitude], 14);
+      console.log('🎯 Map centered successfully');
+    } catch (error) {
+      console.error('🎯 Error centering map:', error);
+    }
+
+    // Find the marker for this offer and open its popup
+    console.log('🎯 Looking for marker with offerId:', offer.id);
+    const marker = markers.value.find(m => m.offerId === offer.id);
+
+    if (marker && marker.leafletMarker) {
+      console.log('🎯 Marker found, opening popup');
+      try {
+        marker.leafletMarker.openPopup();
+        console.log('🎯 Popup opened successfully');
+      } catch (error) {
+        console.error('🎯 Error opening popup:', error);
+      }
+    } else {
+      console.log('🎯 No marker found for this offer');
+    }
+  } else {
+    console.log('🎯 Cannot center map: map or coordinates missing', {
+      hasMap: !!map.value,
+      hasLatitude: !!offer.latitude,
+      hasLongitude: !!offer.longitude
+    });
+  }
+};
+
+// Watch for changes in rideOffers and update the map markers
+watch(rideOffers, (newOffers) => {
+  console.log('🔄 rideOffers watcher triggered with', newOffers.length, 'offers');
+
+  if (map.value) {
+    console.log('🔄 Map is available, updating markers');
+
+    // Clear existing markers from the layer
+    if (markerLayer.value) {
+      console.log('🔄 Clearing existing markers from layer');
+      markerLayer.value.clearLayers();
+    } else {
+      // Create a new marker layer if it doesn't exist
+      console.log('🔄 No marker layer exists, creating new one');
+      const L = window.L;
+      if (L) {
+        try {
+          markerLayer.value = L.layerGroup().addTo(map.value);
+          console.log('🔄 New marker layer created successfully');
+        } catch (error) {
+          console.error('🔄 Error creating marker layer:', error);
+        }
+      } else {
+        console.log('🔄 Leaflet library not available, cannot create marker layer');
+      }
+    }
+
+    // Reset markers array
+    console.log('🔄 Resetting markers array');
+    markers.value = [];
+
+    // Add new markers
+    const L = window.L;
+    if (L && markerLayer.value) {
+      console.log('🔄 Adding', newOffers.length, 'markers to the map');
+      addMarkersToMap(newOffers);
+    } else {
+      console.log('🔄 Cannot add markers: Leaflet or marker layer missing', {
+        hasLeaflet: !!L,
+        hasMarkerLayer: !!markerLayer.value
+      });
+    }
+  } else {
+    console.log('🔄 Map not available, skipping marker update');
+  }
+}, { deep: true });
+
+onMounted(() => {
+  console.log('🚀 Component mounted');
+  console.log('🚀 Initial props:', {
+    rideOffersCount: props.rideOffers?.length || 0,
+    hasSearchParams: !!Object.keys(props.searchParams || {}).length,
+    hasSearchCoordinates: !!props.searchCoordinates
+  });
+
+  console.log('🚀 Initializing map');
+  try {
+    initializeMap();
+  } catch (error) {
+    console.error('🚀 Error initializing map:', error);
+    mapError.value = true;
+    mapLoading.value = false;
+  }
+
+  // Define the event handler function
+  console.log('🚀 Setting up event handler for select-ride-offer event');
+  selectRideOfferHandler.value = (event) => {
+    console.log('🚀 select-ride-offer event received with ID:', event.detail);
+    const offerId = event.detail;
+    const offer = rideOffers.value.find(o => o.id === offerId);
+    if (offer) {
+      console.log('🚀 Offer found, calling selectOffer');
+      selectOffer(offer);
+    } else {
+      console.log('🚀 No matching offer found for ID:', offerId);
+    }
+  };
+
+  // Add the event listener
+  console.log('🚀 Adding event listener for select-ride-offer event');
+  document.addEventListener('select-ride-offer', selectRideOfferHandler.value);
+  console.log('🚀 Component mount completed');
+});
+
+onBeforeUnmount(() => {
+  console.log('🧹 Component unmounting, starting cleanup');
+
+  // Remove the event listener when the component is unmounted
+  if (selectRideOfferHandler.value) {
+    console.log('🧹 Removing select-ride-offer event listener');
+    document.removeEventListener('select-ride-offer', selectRideOfferHandler.value);
+  } else {
+    console.log('🧹 No event handler to remove');
+  }
+
+  // Clean up map, marker layer, and markers
+  if (markerLayer.value) {
+    console.log('🧹 Clearing marker layer');
+    markerLayer.value.clearLayers();
+    // Don't set markerLayer.value to null, as it might still be referenced
+    console.log('🧹 Marker layer cleared');
+  } else {
+    console.log('🧹 No marker layer to clear');
+  }
+
+  if (map.value) {
+    console.log('🧹 Removing map');
+    try {
+      map.value.remove();
+      map.value = null;
+      console.log('🧹 Map removed successfully');
+    } catch (error) {
+      console.error('🧹 Error removing map:', error);
+    }
+  } else {
+    console.log('🧹 No map to remove');
+  }
+
+  console.log('🧹 Clearing markers array');
+  markers.value = [];
+  console.log('🧹 Component cleanup completed');
+});
+
+// Function to initialize the map
+const initializeMap = () =>
