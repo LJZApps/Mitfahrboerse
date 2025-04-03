@@ -38,16 +38,6 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Mitfahrgelegenheit anbieten',
-        href: route('ride-offers.create'),
-        icon: Car,
-    },
-    {
-        title: 'Mitfahrgelegenheit suchen',
-        href: route('ride-offers.search'),
-        icon: Search,
-    },
-    {
         title: 'Kartenübersicht',
         href: route('ride-offers.overview'),
         icon: Map,
@@ -117,7 +107,7 @@ const mainNavItems: NavItem[] = [
                                     <NavigationMenuLink
                                         :class="[
                                             navigationMenuTriggerStyle(),
-                                            'h-10 cursor-pointer px-4 transition-all duration-300 hover:text-primary',
+                                            'h-10 cursor-pointer rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 hover:bg-primary/10 hover:text-primary',
                                             isCurrentRoute(item.href) ? 'text-primary font-medium' : ''
                                         ]"
                                     >

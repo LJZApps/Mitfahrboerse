@@ -60,7 +60,7 @@ const filteredRideOffers = computed(() => {
                     type="text"
                     v-model="searchQuery"
                     placeholder="Suchen..."
-                    class="rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring focus:ring-blue-200 dark:focus:ring-blue-800 focus:ring-opacity-50"
+                    class="rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm focus:border-primary dark:focus:border-primary-accent focus:ring focus:ring-primary/20 dark:focus:ring-primary/30 focus:ring-opacity-50"
                   />
                 </div>
 
@@ -76,7 +76,7 @@ const filteredRideOffers = computed(() => {
 
                 <Link
                   :href="route('ride-offers.search')"
-                  class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition-colors"
+                  class="inline-flex items-center justify-center px-4 py-2 bg-primary hover:bg-primary-accent text-white font-medium rounded-md shadow-sm transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -97,11 +97,11 @@ const filteredRideOffers = computed(() => {
                   type="text"
                   v-model="editCode"
                   placeholder="Bearbeitungscode"
-                  class="rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring focus:ring-blue-200 dark:focus:ring-blue-800 focus:ring-opacity-50"
+                  class="rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm focus:border-primary dark:focus:border-primary-accent focus:ring focus:ring-primary/20 dark:focus:ring-primary/30 focus:ring-opacity-50"
                 />
                 <button
                   type="submit"
-                  class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition-colors"
+                  class="inline-flex items-center justify-center px-4 py-2 bg-primary hover:bg-primary-accent text-white font-medium rounded-md shadow-sm transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
@@ -161,7 +161,7 @@ const filteredRideOffers = computed(() => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <Link
                         :href="route('ride-offers.show', offer.id)"
-                        class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                        class="inline-flex items-center text-primary dark:text-primary-accent hover:text-primary-accent dark:hover:text-primary"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />

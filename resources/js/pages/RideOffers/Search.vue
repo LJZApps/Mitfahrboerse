@@ -7,7 +7,7 @@ import InputError from '@/components/InputError.vue';
 import InputLabel from '@/components/InputLabel.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
-import { Search as SearchIcon, AlertTriangle, InfoIcon } from 'lucide-vue-next';
+import { Search as SearchIcon, AlertTriangle } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -239,9 +239,9 @@ const updateRadiusCircle = () => {
       [searchCoordinates.value.latitude, searchCoordinates.value.longitude],
       {
         radius: radius * 1000, // Convert km to meters
-        fillColor: '#3b82f6',
+        fillColor: 'hsl(var(--primary))',
         fillOpacity: 0.1,
-        color: '#3b82f6',
+        color: 'hsl(var(--primary))',
         weight: 2
       }
     ).addTo(map.value);
@@ -546,7 +546,7 @@ const addMarkersToMap = (offers) => {
             <!-- Search Form -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 mb-6">
               <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center">
-                <SearchIcon class="h-5 w-5 mr-2 text-blue-500" />
+                <SearchIcon class="h-5 w-5 mr-2 text-primary" />
                 Mitfahrgelegenheit suchen
               </h3>
               <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -571,7 +571,7 @@ const addMarkersToMap = (offers) => {
                             <div class="relative group">
                                 <button
                                     type="button"
-                                    class="px-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors h-full"
+                                    class="px-3 bg-primary text-white rounded-r-md hover:bg-primary-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-colors h-full"
                                     @click="getCurrentLocation"
                                     :disabled="isGettingLocation"
                                     title="Aktuellen Standort verwenden"
@@ -622,12 +622,12 @@ const addMarkersToMap = (offers) => {
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 mr-1" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                         </svg>
-                        <span class="text-sm font-medium text-blue-600 dark:text-blue-400">{{ form.radius || 5 }} km</span>
+                        <span class="text-sm font-medium text-primary dark:text-primary-accent">{{ form.radius || 5 }} km</span>
                       </div>
 
                       <!-- Custom styled slider -->
                       <div class="relative">
-                        <div class="absolute h-1 bg-gradient-to-r from-blue-300 to-blue-600 rounded-full top-1/2 transform -translate-y-1/2 left-0 right-0"></div>
+                        <div class="absolute h-1 bg-gradient-to-r from-primary/50 to-primary rounded-full top-1/2 transform -translate-y-1/2 left-0 right-0"></div>
                         <input
                           id="radius"
                           type="range"
@@ -636,7 +636,7 @@ const addMarkersToMap = (offers) => {
                           min="1"
                           max="100"
                           step="1"
-                          style="--thumb-color: #3b82f6; --thumb-size: 16px;"
+                          style="--thumb-color: hsl(var(--primary)); --thumb-size: 16px;"
                         />
                       </div>
 
@@ -646,7 +646,7 @@ const addMarkersToMap = (offers) => {
                       </div>
                     </div>
                     <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 flex-shrink-0 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 flex-shrink-0 text-primary" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                       </svg>
                       <span>Suche nach Mitfahrgelegenheiten im angegebenen Umkreis</span>
@@ -662,7 +662,7 @@ const addMarkersToMap = (offers) => {
                     <div class="w-full flex items-center justify-between">
                         <!-- Textbereich links -->
                         <div class="text-sm text-gray-500 hidden sm:block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-primary mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                                       clip-rule="evenodd" />
@@ -673,7 +673,7 @@ const addMarkersToMap = (offers) => {
                         <!-- Buttonbereich rechts -->
                         <PrimaryButton
                             type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+                            class="bg-primary hover:bg-primary-accent transition-all transform hover:scale-105"
                             :disabled="isSearching"
                         >
                             <template v-if="isSearching">
@@ -836,8 +836,8 @@ const addMarkersToMap = (offers) => {
                   <div v-else class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
                     <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">Mitfahrgelegenheiten</h3>
                     <p class="mb-4">{{ rideOffers.length }} Mitfahrgelegenheiten gefunden.</p>
-                    <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <p class="text-sm text-blue-800 dark:text-blue-200 flex items-start">
+                    <div class="bg-primary/5 dark:bg-primary/20 p-4 rounded-lg border border-primary/10 dark:border-primary/30">
+                      <p class="text-sm text-primary dark:text-primary-foreground flex items-start">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                         </svg>
@@ -934,7 +934,7 @@ const addMarkersToMap = (offers) => {
 .popup-button {
   margin-top: 8px;
   padding: 4px 8px;
-  background-color: #3b82f6;
+  background-color: hsl(var(--primary));
   color: white;
   border: none;
   border-radius: 4px;
@@ -943,7 +943,7 @@ const addMarkersToMap = (offers) => {
 }
 
 .popup-button:hover {
-  background-color: #2563eb;
+  background-color: hsl(var(--primary-accent));
 }
 
 /* Custom slider styling */
@@ -973,7 +973,7 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   margin-top: -6px;
-  background-color: #3b82f6;
+  background-color: hsl(var(--primary));
   border: 2px solid white;
   height: 16px;
   width: 16px;
@@ -984,7 +984,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]::-moz-range-thumb {
   border: none;
-  background-color: #3b82f6;
+  background-color: hsl(var(--primary));
   border: 2px solid white;
   height: 16px;
   width: 16px;
@@ -995,12 +995,12 @@ input[type="range"]::-moz-range-thumb {
 
 /* Hover and Focus states */
 input[type="range"]:hover::-webkit-slider-thumb {
-  background-color: #2563eb;
+  background-color: hsl(var(--primary-accent));
   transform: scale(1.1);
 }
 
 input[type="range"]:hover::-moz-range-thumb {
-  background-color: #2563eb;
+  background-color: hsl(var(--primary-accent));
   transform: scale(1.1);
 }
 
@@ -1009,10 +1009,10 @@ input[type="range"]:focus {
 }
 
 input[type="range"]:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.3);
 }
 
 input[type="range"]:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.3);
 }
 </style>

@@ -380,7 +380,7 @@ const submit = () => {
 
                 <!-- Class -->
                 <div class="group">
-                  <InputLabel for="class" value="Klasse (z.B. IT23x)" class="text-sm font-medium flex items-center" />
+                  <InputLabel for="class" value="Klasse (z.B. Economy, Business)" class="text-sm font-medium flex items-center" />
                   <TextInput
                     id="class"
                     type="text"

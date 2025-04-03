@@ -10,7 +10,9 @@ Route::get('/', function () {
 
 
 // Ride Offers Routes
-Route::get('/ride-offers', [RideOfferController::class, 'index'])->name('ride-offers.index');
+Route::get('/ride-offers', function () {
+    return redirect()->route('ride-offers.overview');
+})->name('ride-offers.index');
 Route::get('/ride-offers/create', [RideOfferController::class, 'create'])->name('ride-offers.create');
 Route::post('/ride-offers', [RideOfferController::class, 'store'])->name('ride-offers.store');
 
