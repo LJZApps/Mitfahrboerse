@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF-Generator für Mitfahrbörse-Handbuch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .pdf-generator {
+            background-color: #f9fafb;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block {
+            background-color: #f1f5f9;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .generate-button {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .generate-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tool-section:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-pdf"></i>
+                <h1>PDF-Generator</h1>
+            </div>
+            <p class="subtitle">Mitfahrbörse-Handbuch</p>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-book"></i> Zurück zum Handbuch</a></li>
+                <li><a href="manual.html" class="active"><i class="fas fa-file-pdf"></i> PDF-Generator</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="content-section">
+                <h2>PDF-Generator für das Mitfahrbörse-Handbuch</h2>
+
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <p>Mit diesem Tool können Sie eine PDF-Version des Mitfahrbörse-Handbuchs erstellen. Folgen Sie den Anweisungen unten, um Ihre eigene PDF-Version zu generieren.</p>
+                    </div>
+                </div>
+
+                <div class="pdf-generator">
+                    <div class="tool-section">
+                        <h3><i class="fas fa-cogs"></i> Voraussetzungen</h3>
+                        <p>Um das PDF zu generieren, benötigen Sie eines der folgenden Tools:</p>
+                        <ul>
+                            <li><strong>wkhtmltopdf</strong> - Ein Open-Source-Tool zur Konvertierung von HTML in PDF</li>
+                            <li><strong>Chrome oder Chromium</strong> - Mit der Druckfunktion des Browsers</li>
+                            <li><strong>Firefox</strong> - Mit der Druckfunktion des Browsers</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-terminal"></i> Methode 1: Mit wkhtmltopdf (Kommandozeile)</h3>
+                        <p>Wenn Sie wkhtmltopdf installiert haben, können Sie den folgenden Befehl verwenden:</p>
+
+                        <div class="code-block">
+                            wkhtmltopdf --enable-local-file-access --page-size A4 --orientation Portrait --margin-top 20 --margin-right 20 --margin-bottom 20 --margin-left 20 index.html anbieten.html suchen.html verwalten.html support.html manual.pdf
+                        </div>
+
+                        <p>Kopieren Sie diesen Befehl und führen Sie ihn in der Kommandozeile im Verzeichnis <code>public/manual/</code> aus.</p>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-print"></i> Methode 2: Mit dem Browser</h3>
+                        <p>Sie können auch Ihren Browser verwenden, um das Handbuch als PDF zu speichern:</p>
+
+                        <ol>
+                            <li>Öffnen Sie jede Seite des Handbuchs in Ihrem Browser:
+                                <ul>
+                                    <li><a href="index.html" target="_blank">Einleitung</a></li>
+                                    <li><a href="anbieten.html" target="_blank">Mitfahrgelegenheit anbieten</a></li>
+                                    <li><a href="suchen.html" target="_blank">Mitfahrgelegenheit suchen</a></li>
+                                    <li><a href="verwalten.html" target="_blank">Angebote verwalten</a></li>
+                                    <li><a href="support.html" target="_blank">Support</a></li>
+                                </ul>
+                            </li>
+                            <li>Drücken Sie <code>Strg+P</code> (Windows/Linux) oder <code>Cmd+P</code> (Mac), um den Druckdialog zu öffnen</li>
+                            <li>Wählen Sie "Als PDF speichern" als Ziel</li>
+                            <li>Passen Sie die Einstellungen an (Papierformat, Ausrichtung, etc.)</li>
+                            <li>Klicken Sie auf "Speichern"</li>
+                        </ol>
+
+                        <p>Um alle Seiten in einer PDF-Datei zu kombinieren, können Sie ein PDF-Tool wie Adobe Acrobat oder einen Online-PDF-Merger verwenden.</p>
+
+                        <a href="javascript:void(0);" onclick="window.open('index.html', '_blank'); window.open('anbieten.html', '_blank'); window.open('suchen.html', '_blank'); window.open('verwalten.html', '_blank'); window.open('support.html', '_blank');" class="generate-button">
+                            <i class="fas fa-external-link-alt"></i> Alle Seiten öffnen
+                        </a>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-magic"></i> Methode 3: Druckoptimierte Version</h3>
+                        <p>Für eine optimale Druckversion können Sie die folgende Seite verwenden, die alle Inhalte in einem Dokument zusammenfasst:</p>
+
+                        <a href="javascript:void(0);" onclick="window.print();" class="generate-button">
+                            <i class="fas fa-print"></i> Aktuelle Seite drucken
+                        </a>
+
+                        <p class="mt-4">Oder öffnen Sie die druckoptimierte Version:</p>
+
+                        <a href="print-all.html" target="_blank" class="generate-button">
+                            <i class="fas fa-file-pdf"></i> Druckoptimierte Version öffnen
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <a href="index.html" class="btn"><i class="fas fa-arrow-left"></i> Zurück zum Handbuch</a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 Mitfahrbörse. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="index.html">Startseite</a>
+                    <a href="support.html">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

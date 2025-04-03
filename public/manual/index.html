@@ -38,7 +38,7 @@
                 <div class="intro-content">
                     <div class="intro-text">
                         <p>Willkommen zum Benutzerhandbuch der Mitfahrbörse! Diese Plattform ermöglicht es Ihnen, Mitfahrgelegenheiten anzubieten und zu finden.</p>
-                        
+
                         <p>Die Mitfahrbörse ist eine einfache und effektive Lösung, um:</p>
                         <ul>
                             <li>Fahrgemeinschaften zu bilden</li>
@@ -46,11 +46,8 @@
                             <li>Die Umwelt zu schonen</li>
                             <li>Neue Kontakte zu knüpfen</li>
                         </ul>
-                        
+
                         <p>Dieses Handbuch führt Sie durch alle Funktionen der Plattform und hilft Ihnen, die Mitfahrbörse optimal zu nutzen.</p>
-                    </div>
-                    <div class="intro-image">
-                        <img src="images/dashboard.png" alt="Mitfahrbörse Dashboard" onerror="this.src='https://via.placeholder.com/400x300?text=Mitfahrbörse+Dashboard'">
                     </div>
                 </div>
 
@@ -63,7 +60,7 @@
                         <p>Erstellen Sie ein Angebot für Ihre Fahrten und teilen Sie Ihren Weg mit anderen.</p>
                         <a href="anbieten.html" class="btn">Mehr erfahren</a>
                     </div>
-                    
+
                     <div class="feature-card">
                         <div class="icon">
                             <i class="fas fa-search"></i>
@@ -72,7 +69,7 @@
                         <p>Finden Sie passende Mitfahrgelegenheiten in Ihrer Nähe mit der Suchfunktion.</p>
                         <a href="suchen.html" class="btn">Mehr erfahren</a>
                     </div>
-                    
+
                     <div class="feature-card">
                         <div class="icon">
                             <i class="fas fa-edit"></i>
@@ -87,15 +84,15 @@
                     <h3>Schnellstart</h3>
                     <ol>
                         <li>
-                            <strong>Mitfahrgelegenheit anbieten:</strong> 
+                            <strong>Mitfahrgelegenheit anbieten:</strong>
                             Klicken Sie auf "Anbieten" und füllen Sie das Formular mit Ihren Kontaktdaten und Fahrtdetails aus.
                         </li>
                         <li>
-                            <strong>Mitfahrgelegenheit suchen:</strong> 
+                            <strong>Mitfahrgelegenheit suchen:</strong>
                             Geben Sie Ihre PLZ oder Ihren Ort ein und wählen Sie einen Suchradius, um Angebote in Ihrer Nähe zu finden.
                         </li>
                         <li>
-                            <strong>Angebote verwalten:</strong> 
+                            <strong>Angebote verwalten:</strong>
                             Verwenden Sie den Bearbeitungscode, den Sie bei der Erstellung erhalten haben, um Ihre Angebote zu bearbeiten oder zu löschen.
                         </li>
                     </ol>
@@ -105,7 +102,7 @@
 
         <footer>
             <div class="footer-content">
-                <p>&copy; 2023 Mitfahrbörse. Alle Rechte vorbehalten.</p>
+                <p>&copy; 2025 Mitfahrbörse. Alle Rechte vorbehalten.</p>
                 <div class="footer-links">
                     <a href="index.html">Startseite</a>
                     <a href="support.html">Support</a>
@@ -119,7 +116,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             const navLinks = document.querySelectorAll('.main-nav a');
-            
+
             navLinks.forEach(link => {
                 const linkPage = link.getAttribute('href').split('#')[0] || 'index.html';
                 if (linkPage === currentPage) {
