@@ -115,7 +115,6 @@ const mainNavItems: NavItem[] = [
                                         {{ item.title }}
                                     </NavigationMenuLink>
                                 </Link>
-                                <!-- Modern active indicator with gradient -->
                                 <div
                                     v-if="isCurrentRoute(item.href)"
                                     class="absolute bottom-0 left-0 h-1 w-full translate-y-px rounded-t-full bg-gradient-to-r from-primary via-primary to-primary-accent"
@@ -146,16 +145,7 @@ const mainNavItems: NavItem[] = [
                             <!-- Future actions can be added here -->
                         </div>
                     </div>
-
-                    <!-- Theme toggle or other actions can be added here in the future -->
                 </div>
-            </div>
-        </div>
-
-        <!-- Breadcrumbs with modern styling -->
-        <div v-if="props.breadcrumbs.length > 1" class="flex w-full border-b border-sidebar-border/70 bg-muted/50">
-            <div class="mx-auto flex h-12 w-full items-center justify-start px-4 text-muted-foreground md:max-w-7xl">
-                <Breadcrumbs :breadcrumbs="breadcrumbs" />
             </div>
         </div>
     </div>

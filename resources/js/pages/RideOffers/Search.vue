@@ -164,20 +164,10 @@ const submit = async () => {
   if (map.value) {
     map.value.closePopup();
 
-    // Ensure all markers are properly attached to the map
+    // Clear markers - they will be recreated by the watch function on rideOffers
     if (markerLayer.value) {
-      // Refresh the marker layer to ensure proper zoom behavior
-      const currentMarkers = [...markers.value];
       markerLayer.value.clearLayers();
       markers.value = [];
-
-      // Re-add existing markers to ensure they're properly attached
-      currentMarkers.forEach(marker => {
-        if (marker.leafletMarker) {
-          markerLayer.value.addLayer(marker.leafletMarker);
-          markers.value.push(marker);
-        }
-      });
     }
   }
 
@@ -245,6 +235,13 @@ const updateRadiusCircle = () => {
         weight: 2
       }
     ).addTo(map.value);
+
+    // Get the bounds of the circle and fit the map to these bounds
+    const circleBounds = radiusCircle.value.getBounds();
+    map.value.fitBounds(circleBounds, {
+      padding: [50, 50], // Add padding to ensure the circle is fully visible
+      maxZoom: 15 // Limit the maximum zoom level to prevent zooming in too much for small radii
+    });
   } catch (error) {
     console.error('Error creating radius circle:', error);
   }
@@ -389,9 +386,9 @@ const initializeMap = () => {
 
       try {
         // Find center of map
-        let centerLat = 50.5411; // Default to Rodewisch coordinates
-        let centerLng = 12.4534; // Coordinates for Rodewisch
-        let zoomLevel = 10;
+        let centerLat = 51.1657; // Default to Germany center
+        let centerLng = 10.4515;
+        let zoomLevel = 6;
 
         // If search coordinates are available, use them
         if (searchCoordinates.value) {
@@ -444,6 +441,21 @@ const initializeMap = () => {
           // Add radius circle if we have search coordinates
           updateRadiusCircle();
 
+          // Add event listeners for map zoom and move events
+          map.value.on('zoomend', () => {
+            // Refresh markers when zoom changes
+            if (markerLayer.value) {
+              addMarkersToMap(rideOffers.value);
+            }
+          });
+
+          map.value.on('moveend', () => {
+            // Refresh markers when map is moved
+            if (markerLayer.value) {
+              addMarkersToMap(rideOffers.value);
+            }
+          });
+
           mapLoading.value = false;
         } catch (mapError) {
           console.error('Error creating map:', mapError);
@@ -478,6 +490,10 @@ const addMarkersToMap = (offers) => {
     return;
   }
 
+  // Clear existing markers before adding new ones
+  markerLayer.value.clearLayers();
+  markers.value = [];
+
   const offersWithCoords = offers.filter(
     offer => offer.latitude && offer.longitude
   );
@@ -497,7 +513,7 @@ const addMarkersToMap = (offers) => {
                 </svg>${Math.round(offer.distance * 10) / 10} km entfernt</p>`
                 : ''
               }
-              <button class="popup-button mt-2" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
+              <button class="popup-button mt-2 w-full" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
                 Details anzeigen
               </button>
             </div>
@@ -521,7 +537,7 @@ const addMarkersToMap = (offers) => {
     try {
       L.popup()
         .setLatLng([centerPoint.lat, centerPoint.lng])
-        .setContent('Keine Mitfahrgelegenheiten mit Koordinaten gefunden.')
+        .setContent(hasSearched.value ? 'Starten Sie eine Suche, um Mitfahrgelegenheiten zu sehen.' : 'Keine Mitfahrgelegenheiten mit Koordinaten gefunden.')
         .openOn(map.value);
     } catch {
       // Silently fail
@@ -582,8 +598,7 @@ const addMarkersToMap = (offers) => {
                                             <path
                                                 class="opacity-75"
                                                 fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                            ></path>
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
                                     </template>
                                     <template v-else>
@@ -598,8 +613,7 @@ const addMarkersToMap = (offers) => {
                                 </button>
                                 <!-- Tooltip -->
                                 <div
-                                    class="absolute right-0 top-full mt-2 w-48 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10"
-                                >
+                                    class="absolute right-0 top-full mt-2 w-48 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
                                     Aktuellen Standort verwenden
                                 </div>
                             </div>
@@ -612,7 +626,6 @@ const addMarkersToMap = (offers) => {
                         </div>
                         <InputError class="mt-2" :message="form.errors.search_query || form.errors.zip_code || form.errors.city" />
                     </div>
-
 
                     <!-- Radius Slider -->
                   <div class="md:col-span-1">

@@ -143,7 +143,7 @@ const initializeMap = () => {
           }
 
           // Create the map
-          map.value = L.map('map').setView([centerLat, centerLng], 10);
+          map.value = L.map('map').setView([centerLat, centerLng], 6);
 
           // Add OpenStreetMap tiles
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -162,7 +162,7 @@ const initializeMap = () => {
                     <div class="popup-content">
                       <h3 class="font-semibold">${offer.first_name || ''} ${offer.last_name}</h3>
                       <p>${offer.street ? offer.street + '<br>' : ''}${offer.zip_code} ${offer.city}</p>
-                      <button class="popup-button" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
+                      <button class="popup-button w-full" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
                         Details anzeigen
                       </button>
                     </div>

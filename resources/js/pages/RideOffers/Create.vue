@@ -145,6 +145,9 @@ const validateForm = () => {
   if (form.phone && form.phone.length > 255) {
     errors.phone = 'Handynummer darf maximal 255 Zeichen lang sein';
     isValid = false;
+  } else if (form.phone && !/^\+?[0-9]{7,15}$/.test(form.phone)) {
+      errors.phone = 'Bitte geben Sie eine gültige Handynummer ein';
+      isValid = false;
   }
 
   // Date validation

@@ -24,7 +24,7 @@ onMounted(() => {
     }
 
     // Create the map
-    map.value = L.map('map').setView([props.rideOffer.latitude, props.rideOffer.longitude], 15);
+    map.value = L.map('map', {scrollWheelZoom:false, attributionControl: false, zoomControl: false, dragging: false}).setView([props.rideOffer.latitude, props.rideOffer.longitude], 15);
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -39,7 +39,10 @@ onMounted(() => {
           <h3 class="font-semibold">${props.rideOffer.first_name || ''} ${props.rideOffer.last_name}</h3>
           <p>${props.rideOffer.street ? props.rideOffer.street + '<br>' : ''}${props.rideOffer.zip_code} ${props.rideOffer.city}</p>
         </div>
-      `);
+      `,
+          { closeButton: false, autoClose: false, closeOnEscapeKey: false, closeOnClick: false, keepInView: true }
+      )
+        .openPopup();
   }
 });
 
