@@ -1,4 +1,15 @@
 <script setup lang="ts">
+/**
+ * Search.vue - Ride Offers Search Component
+ *
+ * Performance Optimizations:
+ * 1. Added explicit event handlers for zoom/move events to fix marker positioning
+ * 2. Implemented popup content caching to avoid recreating the same content
+ * 3. Added batch processing of markers to avoid blocking the main thread
+ * 4. Dynamically loads and uses Leaflet.markercluster for efficient marker clustering
+ * 5. Optimized marker creation and management process
+ * 6. Fixed marker positioning during zoom by avoiding redundant marker clearing
+ */
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
@@ -295,13 +306,50 @@ watch(rideOffers, (newOffers) => {
     // Add new markers
     const L = window.L;
     if (L && markerLayer.value) {
-      addMarkersToMap(newOffers);
+      // Pass true to skip clearing markers since we've already done that
+      addMarkersToMap(newOffers, true);
     }
   }
 }, { deep: true });
 
-onMounted(() => {
+// Function to dynamically load the Leaflet.markercluster plugin
+const loadMarkerClusterPlugin = () => {
+  return new Promise((resolve, reject) => {
+    // Check if already loaded
+    if (window.L && window.L.MarkerClusterGroup) {
+      resolve();
+      return;
+    }
+
+    // Load CSS
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css';
+    document.head.appendChild(link);
+
+    const linkDefault = document.createElement('link');
+    linkDefault.rel = 'stylesheet';
+    linkDefault.href = 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css';
+    document.head.appendChild(linkDefault);
+
+    // Load JS
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js';
+    script.onload = () => resolve();
+    script.onerror = (err) => reject(err);
+    document.head.appendChild(script);
+  });
+};
+
+onMounted(async () => {
   try {
+    // Try to load the marker cluster plugin
+    try {
+      await loadMarkerClusterPlugin();
+    } catch (err) {
+      console.warn('Failed to load marker cluster plugin, falling back to standard markers:', err);
+    }
+
     initializeMap();
   } catch (error) {
     console.error('Error initializing map:', error);
@@ -335,6 +383,10 @@ onBeforeUnmount(() => {
 
   if (map.value) {
     try {
+      // Remove event listeners
+      map.value.off('zoomend', refreshMarkers);
+      map.value.off('moveend', refreshMarkers);
+
       map.value.remove();
       map.value = null;
     } catch (error) {
@@ -342,8 +394,20 @@ onBeforeUnmount(() => {
     }
   }
 
+  // Clear markers array
   markers.value = [];
+
+  // Clear popup cache to prevent memory leaks
+  popupCache.clear();
 });
+
+// Create a function to refresh markers on zoom/move events
+const refreshMarkers = () => {
+  if (map.value && markerLayer.value && rideOffers.value.length > 0) {
+    // Re-add all markers to ensure they're positioned correctly
+    addMarkersToMap(rideOffers.value);
+  }
+};
 
 // Function to initialize the map
 const initializeMap = () => {
@@ -430,9 +494,23 @@ const initializeMap = () => {
 
           // Create a layer group for markers
           try {
-            markerLayer.value = L.layerGroup().addTo(map.value);
+            // Check if MarkerClusterGroup is available (Leaflet.markercluster plugin)
+            if (L.MarkerClusterGroup) {
+              // Use marker clustering for better performance
+              markerLayer.value = L.markerClusterGroup({
+                chunkedLoading: true,
+                spiderfyOnMaxZoom: true,
+                disableClusteringAtZoom: 16,
+                maxClusterRadius: 50
+              }).addTo(map.value);
+            } else {
+              // Fall back to regular layer group
+              markerLayer.value = L.layerGroup().addTo(map.value);
+            }
           } catch (layerError) {
             console.error('Error creating marker layer:', layerError);
+            // Fall back to regular layer group
+            markerLayer.value = L.layerGroup().addTo(map.value);
           }
 
           // Add markers for ride offers
@@ -441,20 +519,9 @@ const initializeMap = () => {
           // Add radius circle if we have search coordinates
           updateRadiusCircle();
 
-          // Add event listeners for map zoom and move events
-          map.value.on('zoomend', () => {
-            // Refresh markers when zoom changes
-            if (markerLayer.value) {
-              addMarkersToMap(rideOffers.value);
-            }
-          });
-
-          map.value.on('moveend', () => {
-            // Refresh markers when map is moved
-            if (markerLayer.value) {
-              addMarkersToMap(rideOffers.value);
-            }
-          });
+          // Add event listeners for zoom and move events to refresh markers
+          map.value.on('zoomend', refreshMarkers);
+          map.value.on('moveend', refreshMarkers);
 
           mapLoading.value = false;
         } catch (mapError) {
@@ -479,8 +546,41 @@ const initializeMap = () => {
   attemptInitialize();
 };
 
+// Cache for marker popups to avoid recreating them
+const popupCache = new Map();
+
+// Function to create popup content
+const createPopupContent = (offer) => {
+  // Check if we already have this popup in cache
+  if (popupCache.has(offer.id)) {
+    return popupCache.get(offer.id);
+  }
+
+  // Create popup content
+  const content = `
+    <div class="popup-content">
+      <h3 class="font-semibold">${offer.first_name || ''} ${offer.last_name}</h3>
+      <p>${offer.street ? offer.street + '<br>' : ''}${offer.zip_code} ${offer.city}</p>
+      ${offer.distance !== undefined ?
+        `<p class="text-sm text-green-600"><svg xmlns="http://www.w3.org/2000/svg" class="inline h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+        </svg>${Math.round(offer.distance * 10) / 10} km entfernt</p>`
+        : ''
+      }
+      <button class="popup-button mt-2 w-full" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
+        Details anzeigen
+      </button>
+    </div>
+  `;
+
+  // Store in cache
+  popupCache.set(offer.id, content);
+
+  return content;
+};
+
 // Function to add markers to the map
-const addMarkersToMap = (offers) => {
+const addMarkersToMap = (offers, skipClearingMarkers = false) => {
   if (!map.value || !markerLayer.value) {
     return;
   }
@@ -490,47 +590,53 @@ const addMarkersToMap = (offers) => {
     return;
   }
 
-  // Clear existing markers before adding new ones
-  markerLayer.value.clearLayers();
-  markers.value = [];
+  // Only clear markers if not already done (e.g., in the watch function)
+  if (!skipClearingMarkers) {
+    markerLayer.value.clearLayers();
+    markers.value = [];
+  }
 
   const offersWithCoords = offers.filter(
     offer => offer.latitude && offer.longitude
   );
 
   if (offersWithCoords.length > 0) {
-    offersWithCoords.forEach((offer) => {
-      try {
-        // Create the marker
-        const marker = L.marker([offer.latitude, offer.longitude])
-          .bindPopup(`
-            <div class="popup-content">
-              <h3 class="font-semibold">${offer.first_name || ''} ${offer.last_name}</h3>
-              <p>${offer.street ? offer.street + '<br>' : ''}${offer.zip_code} ${offer.city}</p>
-              ${offer.distance !== undefined ?
-                `<p class="text-sm text-green-600"><svg xmlns="http://www.w3.org/2000/svg" class="inline h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                </svg>${Math.round(offer.distance * 10) / 10} km entfernt</p>`
-                : ''
-              }
-              <button class="popup-button mt-2 w-full" onclick="document.dispatchEvent(new CustomEvent('select-ride-offer', {detail: ${offer.id}}))">
-                Details anzeigen
-              </button>
-            </div>
-          `);
+    // Create markers in batches for better performance
+    const batchSize = 20;
+    const totalOffers = offersWithCoords.length;
 
-        // Add the marker to the layer group
-        markerLayer.value.addLayer(marker);
+    // Process markers in batches
+    const processBatch = (startIndex) => {
+      const endIndex = Math.min(startIndex + batchSize, totalOffers);
 
-        // Store the marker with a reference to the offer ID
-        markers.value.push({
-          offerId: offer.id,
-          leafletMarker: marker
-        });
-      } catch {
-        // Silently fail for individual markers
+      for (let i = startIndex; i < endIndex; i++) {
+        const offer = offersWithCoords[i];
+        try {
+          // Create the marker
+          const marker = L.marker([offer.latitude, offer.longitude])
+            .bindPopup(createPopupContent(offer));
+
+          // Add the marker to the layer group
+          markerLayer.value.addLayer(marker);
+
+          // Store the marker with a reference to the offer ID
+          markers.value.push({
+            offerId: offer.id,
+            leafletMarker: marker
+          });
+        } catch {
+          // Silently fail for individual markers
+        }
       }
-    });
+
+      // Process next batch if needed
+      if (endIndex < totalOffers) {
+        setTimeout(() => processBatch(endIndex), 0);
+      }
+    };
+
+    // Start processing the first batch
+    processBatch(0);
   } else if (map.value) {
     // Add a message to the map if no offers with coordinates
     const centerPoint = map.value.getCenter();
